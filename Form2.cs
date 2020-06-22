@@ -28,13 +28,8 @@ namespace CourseWork
             dataGridView1.Rows.Clear();
             dataGridView1.Refresh();
 
-            MySqlDataReader rdr = MySql.GetProduts();
-            while (rdr.Read())
-            {
-                dataGridView1.Rows.Add(rdr.GetInt32(0), rdr.GetString(1),
-                    rdr.GetDouble(2), rdr.GetInt32(3), rdr.GetDouble(4));
-            }
-            rdr.Close();
+            MySql.GetProduts().ForEach(p => dataGridView1.Rows.Add(p.Article, p.Name, 
+                p.Weight, p.Count, p.Cost));
         }
 
         private void dataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)

@@ -1,12 +1,5 @@
 ﻿using CourseWork.Entities;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CourseWork
@@ -23,6 +16,7 @@ namespace CourseWork
 
         private void Product_Load(object sender, EventArgs e)
         {
+            if (product.Article == null) return; 
             name.Text = product.Name;
             article.Text = product.Article.ToString();
             weight.Text = product.Weight.ToString();
@@ -37,12 +31,14 @@ namespace CourseWork
 
         private void save_Click(object sender, EventArgs e)
         {
+            bool flag = product.Article == null;
             product.Name = name.Text;
             product.Weight = double.Parse(weight.Text);
+            product.Article = article.Text;
             product.Cost = double.Parse(cost.Text);
             product.Count = int.Parse(count.Text);
 
-            if (product.Article == 0) 
+            if (flag) 
                 MySql.InsertProduct(product); 
             else
                 MySql.UpdateProduct(product);

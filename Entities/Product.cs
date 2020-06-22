@@ -1,39 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 
 namespace CourseWork.Entities
 {
     public class Product
     {
-        private int article;
-        private string name;
-        private double weight;
-        private int count;
-        private double cost;
-
-        private Product(int article, string name, double weight, int count, double cost)
+        public string Article { get; set; }
+        public string Name { get; set; }
+        public double Weight { get; set; }
+        public int Count { get; set; }
+        public double Cost { get; set; }
+        
+        private Product()
         {
-            this.article = article;
-            this.name = name;
-            this.weight = weight;
-            this.count = count;
-            this.cost = cost;
-        }
 
-        public int Article { get => article; set => article = value; }
-        public string Name { get => name; set => name = value; }
-        public double Weight { get => weight; set => weight = value; }
-        public int Count { get => count; set => count = value; }
-        public double Cost { get => cost; set => cost = value; }
+        }
 
         public static Product From(DataGridViewCellCollection collection)
         {
-            if (collection[0].Value == null) return new Product(0, "", 0, 0, 0);
-            return new Product((int) collection[0].Value, (string) collection[1].Value, (double) collection[2].Value, (int) collection[3].Value, (double) collection[4].Value);
+            if (collection[0].Value == null) return new Product();
+
+            return new Product
+            {
+                Article = collection[0].Value.ToString(),
+                Name = collection[1].Value.ToString(),
+                Weight = double.Parse(collection[2].Value.ToString()),
+                Count = int.Parse(collection[3].Value.ToString()),
+                Cost = double.Parse(collection[4].Value.ToString())
+            };
+        }
+
+        public static Product From(MySqlDataReader rdr)
+        {
+            return new Product
+            {
+                Article = rdr.GetString(0),
+                Name = rdr.GetString(1),
+                Weight = rdr.GetDouble(2),
+                Count = rdr.GetInt32(3),
+                Cost = rdr.GetDouble(4)
+            };
         }
     }
 }
